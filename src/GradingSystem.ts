@@ -20,26 +20,70 @@ interface Student {
 }
 
 class Gradebook<T extends Student> {
-  students = []
+  students: T[] = []
 
-  addStudent(student) {
+  addStudent(student: T): string {
+    this.students.push(student);
 
+    return `${student.name} added to the gradebook.`
   }
 
-  addGrade(id, grade) {
+  addGrade(id: number, grade: Grade): string {
+    const targetStudent: Student = this.students.find(student => student.id === id);
 
+    if (targetStudent) {
+      targetStudent.grades.push(grade)
+
+      return `Grade recorded for ${grade.subject}.`
+    }
+
+    return `The student id: ${id} is undefinded.`
   }
 
-  getAverageGrade(id) {
+  getAverageGrade(id: number): string {
+    const targetStudent: T = this.students.find(student => student.id === id);
 
+    if (targetStudent) {
+      let sum = 0;
+      targetStudent.grades.map((grade: Grade) => {
+        sum += grade.grade;
+      })
+      
+      const average = sum/targetStudent.grades.length
+
+      return `${targetStudent.name}'s average grade is ${average}`
+    }
+
+
+    return `The student id: ${id} is undefinded.`
   }
 
-  getStudentGrades(id) {
+  getStudentGrades(id: number): Grade[] | string {
+    const targetStudent: T = this.students.find(student => student.id === id);
 
+    if (targetStudent) {
+      return targetStudent.grades
+    }
+
+    return `The student id: ${id} is undefinded.`
   }
 
-  updateSubjectGrade(id, subject, newGrade) {
+  updateSubjectGrade(id: number, subject: string, newGrade: number): string {
+    const targetStudent: T = this.students.find(student => student.id === id);
 
+    if (targetStudent) {
+      const targetGrade = targetStudent.grades.find((grade: Grade) => grade.subject === subject)
+
+      if (targetGrade) {
+        targetGrade.grade = newGrade;
+
+        return `${targetStudent.name}'s English grade to ${newGrade}`;
+      }
+
+      return `${targetStudent.name}'s English grade is undefinded`;
+    }
+
+    return `The student id: ${id} is undefinded.`
   }
 }
 
