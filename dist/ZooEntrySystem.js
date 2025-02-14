@@ -39,8 +39,14 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     return useValue ? value : void 0;
 };
 function AgeRestriction(minAge) {
-    return function (target, context) {
+    return function (target) {
         return class extends target {
+            constructor(...args) {
+                super(...args);
+                if (this.age < minAge) {
+                    throw new Error(`🚫 Access Denied: ${this.name} is under ${minAge} and cannot enter the zoo!`);
+                }
+            }
         };
     };
 }
@@ -60,9 +66,12 @@ let ZooGuest = (() => {
         }
         name;
         age;
-        constructor(name, age) { }
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
         enterZoo() {
-            // Add welcome message
+            return `🎟️ Welcome to the zoo, ${this.name}! Enjoy your visit.`;
         }
     };
     return ZooGuest = _classThis;
