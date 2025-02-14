@@ -10,14 +10,36 @@
 class MyStorage {
     items = [];
     addItem(item) {
+        this.items.push(item);
+        const originalName = item.name;
+        return originalName
+            ? `${originalName} updated successfully.`
+            : `${item} updated successfully.`;
     }
     getItems() {
+        return this.items;
     }
     removeItem(id) {
+        const index = this.items.findIndex(item => item === id);
+        if (index !== -1) {
+            this.items.splice(index, 1);
+            return `${id} removed from storage.`;
+        }
+        return `Item not found.`;
     }
     findItem(prop, val) {
+        return this.items.find(item => item[prop] === val);
     }
     updateItem(prop, id, update) {
+        const targetItem = this.findItem(prop, id);
+        if (!targetItem) {
+            return "Item not found.";
+        }
+        const originalName = targetItem.name;
+        Object.assign(targetItem, update);
+        return originalName
+            ? `${originalName} updated successfully.`
+            : `${id} updated successfully.`;
     }
 }
 // Test cases
