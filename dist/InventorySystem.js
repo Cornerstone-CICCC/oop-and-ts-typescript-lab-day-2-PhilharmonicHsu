@@ -10,14 +10,30 @@
 class InventoryManager {
     products = [];
     addProduct(product) {
+        this.products.push(product);
+        return `Product ${product.name} added successfully!`;
     }
     updateProduct(id, update) {
+        const targetProduct = this.products.find((product) => product.id === id);
+        if (targetProduct) {
+            Object.assign(targetProduct, update);
+            return `Product ${id} updated successfully!`;
+        }
+        return "Product not found";
     }
     getProduct(id) {
+        const targetProduct = this.products.find((product) => product.id === id);
+        if (targetProduct) {
+            return targetProduct;
+        }
+        return "Product not found";
     }
     getAllProducts() {
+        return this.products;
     }
     removeProduct(id) {
+        this.products = this.products.filter((product) => product.id !== id);
+        return `Product ${id} removed successfully!`;
     }
 }
 // Test cases
